@@ -62,7 +62,7 @@
   }
 
 /* ----------------------------------------section----------------------------------------*/
-  section, #index {
+  section {
     min-height: 100vh;
   }
   section main {
@@ -315,6 +315,31 @@
     #index #actix-code {
         flex: 1;
     }
+    #act-cn-tabs {
+      width: 70%;
+      margin: 0 auto 2rem;
+      border:#dfdedf solid 1px;
+    }
+    .act-menu li{
+      width: 25%;
+      display: inline-block;
+      text-align:center;
+      line-height:44px;
+      background-color: #faf2f2;
+      border:#afadaf solid 1px;
+    }
+    .act-menu li.off{
+      background:#FFFFFF;
+      color:#000000;
+      font-weight:bold;
+    } 
+    #act-cn-tabs #content {
+      padding: 1.5rem;
+    }
+    #act-cn-tabs #content p {
+      margin: 1rem 0;
+    }
+    
     section.docs .inner, section.blog .inner {
       display: flex;
     }

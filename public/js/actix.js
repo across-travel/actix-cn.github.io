@@ -12,3 +12,19 @@ menu.addEventListener('click', function() {
         // manv.setAttribute('style', 'height: auto !important');
         // manv.style.setProperty( 'height',' auto', 'important');
 }, false);
+
+function setTab(name,cursel){
+  let tlinks = document.getElementById("act-cn-tabs").getElementsByTagName('li')
+  for(var i=1; i<=tlinks.length; i++){
+      var menu = document.getElementById(name+i);
+      var menudiv = document.getElementById("con_"+name+"_"+i);
+      if(i==cursel){
+          menu.className="off";
+          menudiv.style.display="block";
+      }
+      else{
+          menu.className="";
+          menudiv.style.display="none";
+      }
+  }
+}

@@ -7,7 +7,7 @@
 <title>Actix-cn</title>
 <link rel="shortcut icon" href="/public/imgs/favicon.ico">
 <link rel="stylesheet" href="/public/css/styles.css">
-<script src="/public/js/nav.js" async="async"></script>
+<script src="/public/js/actix.js" async="async"></script>
 
   </head>
   <body>
@@ -57,7 +57,7 @@
 
           <li>
             <h2>速度极快</h2>
-            <p>Actix 具有顶级的速度. <a href="https://www.techempower.com/benchmarks/#section=data-r16&hw=ph&test=plaintext">查看</a>.</p>
+            <p>Actix 具有顶级的速度. <a href="https://www.techempower.com/benchmarks/#section=data-r16&hw=ph&test=plaintext">查看链接</a>.</p>
           </li>
       </div>
   </div>
@@ -80,6 +80,81 @@ fn main() {
 </code></pre>
   </div>
 </div>
+
+<div id="act-cn-tabs">
+    <ul class="act-menu">
+        <li id="one1" onclick="setTab('one',1)">灵活的请求响应</li><li id="one2" onclick="setTab('one',2)">强大的Extractors</li><li id="one3" onclick="setTab('one',3)">轻松处理表单</li><li id="one4" onclick="setTab('one',4)">请求路由</li>
+    </ul>
+    <div id="content">
+                <div id="con_one_1">
+                    <h2>灵活的请求响应</h2>
+                    <p>Actix中的Handler函数可以返回实现该<code>Respondert</code> rait的各种对象。这使得从API返回一致的响应变得轻而易举。</p>
+                     <pre> <code>#[derive(Serialize)]
+      struct Measurement {
+           temperature: f32,
+     }
+          
+      fn hello_world() -> impl Responder {
+          "Hello World!"
+      }
+          
+      fn current_temperature(_req: HttpRequest) -> impl Responder {
+          Json(Measurement { temperature: 42.3 })
+      } </code> </pre>
+                </div>
+                <div id="con_one_2" style="display:none;">
+                    <h2>强大的Extractors</h2>
+                    <p>
+                      Actix提供了一个强大的提取器系统，可以从传入的HTTP请求中提取数据并将其传递给您的视图函数。这不仅可以创建方便的API，
+                      而且还意味着您的视图函数可以是同步代码，并且仍然可以受益于异步IO处理。
+                    </p>
+                    <pre> <code>#[derive(Deserialize)]
+struct Event {
+     timestamp: f64,
+      kind: String,
+      tags: Vec<String>,
+     }
+     fn capture_event(evt: Json<Event>) -> impl Responder {
+         let id = store_event_in_db(evt.timestamp, evt.kind, evt.tags);
+         format!("got event {}", id)
+     }</code> </pre>
+      </div>
+                <div id="con_one_3" style="display:none;">
+                    <h2>轻松处理表单</h2>
+             <p>
+               处理multipart/ urlencoded表单数据很容易。只需定义一个可以反序列化的结构，actix就可以处理剩下的部分。
+             </p>
+                   <pre> <code>#[derive(Deserialize)]
+     struct Register {
+         username: String,
+         country: String,
+     }
+   
+     fn register(data: Form<Register>) -> impl Responder {
+         format!("Hello {} from {}!", data.username, data.country)
+     }</code> </pre>
+        </div>
+                <div id="con_one_4" style="display:none;">
+                    <h2>请求路由</h2>
+                    <p>
+                      一个actix应用程序带有一个URL路由系统，可以让你在URL上匹配并调用单个处理程序。为了获得额外的灵活性，可以使用域。
+                    </p>
+                    <pre> <code>fn index(req: HttpRequest) -> impl Responder {
+      "Hello from the index page"
+     }
+     fn hello(path: Path<String>) -> impl Responder {
+          format!("Hello {}!", *path)
+     }
+     fn main() {
+          App::new()
+          .resource("/", |r| r.method(Method::Get).with(index))
+          .resource("/hello/{name}", |r| r.method(Method::Get).with(hello))
+          .finish();
+     }</code> </pre>
+      </div>
+    </div>
+</div>
+
 
     </main>
     <footer>
