@@ -69,8 +69,6 @@
     margin-bottom: 2rem;
   }
   section.docs aside ul li a, section.blog aside ul li a {
-    display: inline-block;
-    margin-left: 0.8rem;
     text-decoration: none;
     transition: all 0.15s ease-in-out;
   }
@@ -105,7 +103,6 @@
     border: 1px solid #ccc;
     text-shadow: none;
   }
-
   code {
     padding: 2px 4px;
     font-size: 90%;
@@ -115,7 +112,6 @@
     color: var(--purple);
     text-shadow: none;
   }
-
   pre code {
     padding: 0;
     font-size: inherit;
@@ -294,7 +290,7 @@
     section {
       margin: 0 auto;
       padding-top: 5.5rem;
-      width: 75%;
+      width: 70%;
     }
     #index {
       width: 70%;
@@ -329,7 +325,7 @@
       border:#afadaf solid 1px;
     }
     .act-menu li.off{
-      background:#FFFFFF;
+      background:rgb(241, 243, 242);
       color:#000000;
       font-weight:bold;
     } 
@@ -342,24 +338,15 @@
     
     section.docs .inner, section.blog .inner {
       display: flex;
+      flex-flow: row;
     }
     section.docs aside, section.blog aside {
-      flex: 0 1 30%;
+      flex: 1;
     }
     section.docs main, section.blog main {
-      flex: 0 1 100%;
+      width: 75%;
     }
     #hr {
       display: none;
-    }
-    .columns {
-      display: flex;
-    }
-    .columns.three > article {
-      flex: 0 1 33%;
-      margin-right: 1.5%;
-    }
-    .columns.three > article:last-child {
-      margin-right: 0;
     }
   }
