@@ -38,8 +38,46 @@
       </div>
     </div>
 <div id="index">
-  <div id="content">
-   
+  <div id="actix-features">
+      <div class="actix-intro">
+          <li>
+            <h2>类型安全</h2>
+            <p>忘记关于字符串类型的对象，从请求到响应，一切都有类型，异步。</p>
+          </li>
+
+          <li>
+            <h2>特性丰富</h2>
+            <p>Actix提供了丰富的特性开箱即用。WebSockets，HTTP/2，流，管道，SSL，异步HTTTP客户端等一应俱全.</p>
+          </li>
+
+          <li>
+            <h2>扩展性强</h2>
+            <p>轻松创建任何基于Actix应用的自己的特色库。</p>
+          </li>
+
+          <li>
+            <h2>速度极快</h2>
+            <p>Actix 具有顶级的速度. <a href="https://www.techempower.com/benchmarks/#section=data-r16&hw=ph&test=plaintext">查看</a>.</p>
+          </li>
+      </div>
+  </div>
+  <div id="actix-code">
+            <pre> <code>
+extern crate actix_web;
+use actix_web::{http::Method, server, App, Path, Responder};
+          
+fn index(info: Path<(u32, String)>) -> impl Responder {
+      format!("Hello {}! id:{}", info.1, info.0)
+}
+          
+fn main() {
+    server::new(
+       || App::new()
+            .route("/{id}/{name}/index.html", Method::GET, index))
+            .bind("127.0.0.1:8080").unwrap()
+            .run();
+}
+</code></pre>
   </div>
 </div>
 

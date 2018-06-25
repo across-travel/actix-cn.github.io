@@ -165,10 +165,7 @@
       background-color: var(--grey);
       border: none;
   }
-  #index #content {
-      padding: 2rem;
-      text-align: center;
-  }
+
 /* ----------------------------------------guides----------------------------------------*/
 /* ----------------------------------------projects----------------------------------------*/
 /* ----------------------------------------community----------------------------------------*/
@@ -300,8 +297,23 @@
       width: 75%;
     }
     #index {
-      margin: 0 auto;
-      width: 75%;
+      width: 70%;
+      margin: 2rem auto;
+      display: flex;
+      flex-flow: row;
+    }
+    #index #actix-features {
+        width: 40%;
+        margin-right: 1rem;
+    }
+    #index #actix-features li {
+        margin-bottom: 1.5rem;
+    }
+    #index #actix-features li h2 {
+      margin-bottom: 1rem;
+    }
+    #index #actix-code {
+        flex: 1;
     }
     section.docs .inner, section.blog .inner {
       display: flex;
