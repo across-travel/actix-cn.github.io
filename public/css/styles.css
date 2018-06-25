@@ -150,12 +150,11 @@
       line-height: 2rem;
       background-color: var(--black);
   }
-  #index-top h1 {
-      font-size: 2rem;
-      color: var(--white);
+  #index-top img {
+      width: 33rem;
   }
   #index-top p {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     margin: 2rem 0;
     color: var(--grey);
   }
