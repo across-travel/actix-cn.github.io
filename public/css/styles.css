@@ -2,8 +2,8 @@
   :root {
     --grey:  #f5f5f5;
     --text-color: #413e3e;
-    --black: #000;
-    --white: #fff;
+    --banner: #850268;
+    --white: #ffffff;
     --purple: #5e164e;
     --font-stack: helvetica, arial, sans-serif;
   }
@@ -33,7 +33,7 @@
     line-height: 60px;
     zoom:1;
     display: flex;
-    background-color: var(--black);
+    background-color: var(--banner);
     justify-content: space-between;
     border-bottom: 1px solid var(--purple);
     /* border-bottom: 1px solid #dfdcdc;  
@@ -52,12 +52,12 @@
     margin: auto 2vw;
   }
   #lnav label a {
+    margin-right: 1vw;
     color: var(--grey);
   }
   #lnav h1 img {
     width: 2.2rem;
     height: 2.2rem;
-    margin-top: -0.25rem;
     vertical-align:middle;
   }
 
@@ -100,24 +100,26 @@
     display: block;
     padding: 9.5px;
     margin: 0 0 10px;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.42857143;
-    color: var(--purple);
+    color: var(--dark-grey);
     word-break: break-all;
     word-wrap: break-word;
     background-color: #f5f5f5;
     border: 1px solid #ccc;
     text-shadow: none;
+    overflow-x: auto;
   }
+  
   code {
     padding: 2px 4px;
-    font-size: 90%;
     background-color: #f5f5f5;
     border-radius: 4px;
     border: 1px solid #ccc;
-    color: var(--purple);
+    color: var(--dark-grey);
     text-shadow: none;
   }
+  
   pre code {
     padding: 0;
     font-size: inherit;
@@ -133,6 +135,7 @@
     text-align: center;
     justify-content: center;
     border-top: 2px solid var(--purple);
+    bottom: 0;
   }
   footer a { 
     color: var(--purple); 
@@ -147,9 +150,9 @@
 /* ----------------------------------------home----------------------------------------*/
   #index-top {
       margin: 0 auto;
-      padding: 11rem 2rem 8rem;
+      padding: 11rem 2rem 7rem;
       text-align: center;
-      background-color: var(--black);
+      background-color: var(--banner);
   }
 
   #index-top p {
@@ -159,11 +162,14 @@
     color: var(--grey);
   }
   #index-top button {
-      margin-right: 18px;
-      font-size: 18px;
-      padding: 8px 22px;
-      background-color: var(--grey);
-      border: none;
+      padding: 0.6rem 2rem;
+      background-color: #865086;
+      border:#afadaf solid 1px;
+  }
+  #index-top button a {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #ffffff;
   }
   .act-menu li{
     text-align:center;
@@ -198,7 +204,7 @@
       height: 0;
       display: block;
       overflow: hidden;
-      background-color: var(--black);
+      background-color: var(--banner);
       
     }
     #rnav li a {
@@ -227,7 +233,7 @@
       width: 100%;
       height: 0.25rem;
       margin: 0.6rem 0;
-      background-color: var(--black);
+      background-color: var(--banner);
     }
     #act-cn-tabs {
       width: 95%;
@@ -264,30 +270,49 @@
       width: 85%;
     }
     #index {
-      margin: 0 auto;
       width: 85%;
+      margin: 2rem auto;
+      display: flex;
+      flex-flow: row;
+    }
+    #index-top img {
+      width: 22rem;
+    }
+    #index #actix-features {
+        width: 40%;
+        margin-right: 1rem;
+    }
+    #index #actix-features li {
+        margin-bottom: 1.5rem;
+    }
+    #index #actix-features li h2 {
+      margin-bottom: 1rem;
+    }
+    #index #actix-code {
+        flex: 1;
+    }
+    #act-cn-tabs {
+      width: 85%;
+      margin: 0 auto 2rem;
+      border:#dfdedf solid 1px;
+    }
+    .act-menu li{
+      width: 25%;
+      display: inline-block;
     }
     section.docs .inner, section.blog .inner {
       display: flex;
+      flex-flow: row;
     }
     section.docs aside, section.blog aside {
-      flex: 0 1 30%;
+      flex: 1;
     }
     section.docs main, section.blog main {
-      flex: 0 1 100%;
+      width: 75%;
+      word-wrap: break-word;
     }
     #hr {
       display: none;
-    }
-    .columns {
-      display: flex;
-    }
-    .columns.three > article {
-      flex: 0 1 33%;
-      margin-right: 1.5%;
-    }
-    .columns.three > article:last-child {
-      margin-right: 0;
     }
   }
 
