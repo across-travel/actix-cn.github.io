@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1", maximum-scale=1,user-scalable=no,shrink-to-fit=no">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Docs</title>
+<title>文档:基本:开始</title>
 <link rel="shortcut icon" href="/public/imgs/favicon.ico">
 <link rel="stylesheet" href="/public/css/styles.css">
 <script src="/public/js/actix.js" async="async"></script>
@@ -85,8 +85,26 @@
           </aside>
           <hr id="hr">
           <main>
-          <p>Actix是您用Rust开发Web服务的大门，本文档将引导您。</p>
-<p>本文档目前主要介绍actix-web构建在<a href="https://docs.rs/actix">actix</a>的actor框架和 <a href="https://tokio.rs/">Tokio</a>异步IO系统之上的高级Web框架。这是从API稳定的角度出发。</p>
+          <h1>开始</h1>
+<p>我们来编写第一个actix web应用程序！</p>
+<h2>Hello, world!</h2>
+<p>首先创建一个新的基于二进制的Cargo项目并进入新目录：</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#c0c5ce;">cargo new hello-world
+</span><span style="background-color:#2b303b;color:#b48ead;">cd</span><span style="background-color:#2b303b;color:#c0c5ce;"> hello-world
+</span></pre>
+<p>现在，确保actix-web的Cargo.toml 包含以下项目依赖关系：</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#c0c5ce;">[dependencies]
+</span><span style="background-color:#2b303b;color:#c0c5ce;">actix-web = &quot;&lt; actix-version &quot;actix-web&quot; &gt;&quot;
+</span></pre>
+<p>为了实现一个Web服务器，我们首先需要创建一个请求处理程序。请求处理函数接受一个HttpRequest实例作为其唯一参数，并返回一个可转换为HttpResponse的类型：</p>
+<p>文件名: <code>src/main.rs</code></p>
+<p>&lt; include-example example=&quot;getting-started&quot; section=&quot;setup&quot; &gt;</p>
+<p>接下来，创建一个Application实例，并将请求处理程序与应用程序的resource一起注册在特定HTTP方法和路径，然后，应用程序实例可以用于HttpServer来侦听将传入的连接。服务器接受一个应该返回一个HttpHandler实例的函数 。简单来说server::new可以使用了，它是HttpServer::new的简写：</p>
+<p>&lt; include-example example=&quot;getting-started&quot; section=&quot;main&quot; &gt;</p>
+<p>仅此而已！现在编译并运行该程序cargo run。去http://localhost:8088 看结果。</p>
+<p>如果你想要在开发过程中重新编译后自动重新加载服务器。请查看<a href="../autoreload/">自动重新加载模式</a>。</p>
 
           </main>
         </div>

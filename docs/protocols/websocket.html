@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1", maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>文档:协议:Websocket</title>
+<link rel="shortcut icon" href="/public/imgs/favicon.ico">
+<link rel="stylesheet" href="/public/css/styles.css">
+<script src="/public/js/actix.js" async="async"></script>
+
+  </head>
+  <body>
+    <header>
+        <div id="mnav">
+      <div id="lnav">
+        <h1><a href="/"><img src="/public/imgs/actix.png"/></a><a id="name" href="/">Actix</a></h1>
+        <label ><a href="#" id="menu">menu</a></label>
+      </div>
+      <div id="rnav">
+          <li> <a href="/docs" title="docs">Docs</a></li>
+          <li> <a href="/blog" title="blog">Blog</a></li>
+          <li> <a href="/projects.html" title="projects">Projcsts</a></li>
+          <li> <a href="/community.html" title="community">Community</a></li>
+          <li> <a href="/more.html" title="more">More</a></li>
+      </div> 
+  </div>
+
+    </header>
+    <main>
+      <section class="blog">
+        <div class="inner">
+          <aside>
+            <details>
+              <summary>介绍</summary>
+                <ul>
+                  <li><a  href="/docs/intro/whatis.html">何为Actix</a></li>
+                  <li><a  href="/docs/intro/installation.html">安装</a></li>
+                </ul>
+            </details>
+            <details>
+              <summary>基本</summary>
+              <ul>
+                <li><a  href="/docs/basics/application.html">应用</a></li>
+                <li><a  href="/docs/basics/extractors.html">Extractors</a></li>
+                <li><a  href="/docs/basics/getting-started.html">开始</a></li>
+                <li><a  href="/docs/basics/handlers.html">Handlers</a></li>
+                <li><a  href="/docs/basics/server.html">服务器</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>高级</summary>
+              <ul>
+                <li><a  href="/docs/advance/errors.html">错愕处理</a></li>
+                <li><a  href="/docs/advance/middleware.html">中间件</a></li>
+                <li><a  href="/docs/advance/request.html">请求</a></li>
+                <li><a  href="/docs/advance/response、.html">响应</a></li>
+                <li><a  href="/docs/advance/static-files.html">静态文件</a></li>
+                <li><a  href="/docs/advance/testing.html">测试</a></li>
+                <li><a  href="/docs/advance/url-dispatch.html">路由分发</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>协议</summary>
+              <ul>
+                <li><a  href="/docs/protocols/http2.html">HTTP2</a></li>
+                <li><a  href="/docs/protocols/websocket.html">Websocket</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>主题</summary>
+              <ul>
+                <li><a  href="/docs/theme/autoreload.html">自动重加载</a></li>
+                <li><a  href="/docs/theme/databases.html">数据库</a></li>
+                <li><a  href="/docs/theme/sentry.html">Sentry</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>API文档</summary>
+              <ul>
+                <li><a  href="https://docs.rs/actix" target="view_window">Actix</a></li>
+                <li><a  href="https://docs.rs/actix-web" target="view_window">Actix-web</a></li>
+              </ul>
+            </details>
+          </aside>
+          <hr id="hr">
+          <main>
+          <p>Actix支持WebSockets开箱即用。可以使用<a href="https://actix.rs/actix-web/actix_web/ws/struct.WsStream.html">ws :: WsStream</a>将请求的Payload转换为<a href="https://actix.rs/actix-web/actix_web/ws/enum.Message.html">ws :: Message</a>流，然后使用流组合器来处理实际的消息，但处理websocket通信使用http actor更简单。</p>
+<p>以下是一个简单的websocket echo server的例子：</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">actix</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">*</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">actix_web</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">*</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#65737e;">///</span><span style="background-color:#2b303b;color:#65737e;"> Define http actor
+</span><span style="background-color:#2b303b;color:#b48ead;">struct</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">Ws</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">impl</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">Actor </span><span style="background-color:#2b303b;color:#b48ead;">for</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">Ws</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#b48ead;">type</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">Context</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">=</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">ws</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">WebsocketContext</span><span style="background-color:#2b303b;color:#c0c5ce;">&lt;</span><span style="background-color:#2b303b;color:#b48ead;">Self</span><span style="background-color:#2b303b;color:#c0c5ce;">&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#65737e;">///</span><span style="background-color:#2b303b;color:#65737e;"> Handler for ws::Message message
+</span><span style="background-color:#2b303b;color:#b48ead;">impl</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">StreamHandler</span><span style="background-color:#2b303b;color:#c0c5ce;">&lt;</span><span style="background-color:#2b303b;color:#c0c5ce;">ws</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Message, </span><span style="background-color:#2b303b;color:#c0c5ce;">ws</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">ProtocolError</span><span style="background-color:#2b303b;color:#c0c5ce;">&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#b48ead;">for</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">Ws</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">handle</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&amp;</span><span style="background-color:#2b303b;color:#b48ead;">mut</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#bf616a;">self</span><span style="background-color:#2b303b;color:#c0c5ce;">, </span><span style="background-color:#2b303b;color:#bf616a;">msg</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">ws</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Message, </span><span style="background-color:#2b303b;color:#bf616a;">ctx</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">&amp;</span><span style="background-color:#2b303b;color:#b48ead;">mut</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#b48ead;">Self</span><span style="background-color:#2b303b;color:#b48ead;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Context</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#b48ead;">match</span><span style="background-color:#2b303b;color:#c0c5ce;"> msg </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">            </span><span style="background-color:#2b303b;color:#c0c5ce;">ws</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Message</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Ping</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">msg</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">=&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> ctx.</span><span style="background-color:#2b303b;color:#96b5b4;">pong</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&amp;</span><span style="background-color:#2b303b;color:#c0c5ce;">msg</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">            </span><span style="background-color:#2b303b;color:#c0c5ce;">ws</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Message</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Text</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">text</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">=&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> ctx.</span><span style="background-color:#2b303b;color:#96b5b4;">text</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">text</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">            </span><span style="background-color:#2b303b;color:#c0c5ce;">ws</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Message</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Binary</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">bin</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">=&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> ctx.</span><span style="background-color:#2b303b;color:#96b5b4;">binary</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">bin</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">            </span><span style="background-color:#2b303b;color:#c0c5ce;">_</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">=&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">main</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">App</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">new</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">      </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">resource</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">/ws/</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">|</span><span style="background-color:#2b303b;color:#bf616a;">r</span><span style="background-color:#2b303b;color:#c0c5ce;">|</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">r.</span><span style="background-color:#2b303b;color:#96b5b4;">f</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">|</span><span style="background-color:#2b303b;color:#bf616a;">req</span><span style="background-color:#2b303b;color:#c0c5ce;">|</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">ws</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">start</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">req</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> Ws</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">      </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">finish</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span></pre>
+<p><a href="https://github.com/actix/examples/tree/master/websocket/">websocket directory</a>提供了一个简单的websocket echo server示例 。</p>
+<p><a href="https://github.com/actix/examples/tree/master/websocket-chat/">websocket-chat directory</a>提供了一个聊天服务器，可以通过websocket或tcp连接进行聊天</p>
+
+          </main>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div >
+  <p>Made ❤️  by the <a href="https://cobalt-org.github.io/">Cobalt</a></p>
+</div>
+
+    </footer>
+  </body>
+</html>

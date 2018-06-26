@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1", maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>文档:基本:服务器</title>
+<link rel="shortcut icon" href="/public/imgs/favicon.ico">
+<link rel="stylesheet" href="/public/css/styles.css">
+<script src="/public/js/actix.js" async="async"></script>
+
+  </head>
+  <body>
+    <header>
+        <div id="mnav">
+      <div id="lnav">
+        <h1><a href="/"><img src="/public/imgs/actix.png"/></a><a id="name" href="/">Actix</a></h1>
+        <label ><a href="#" id="menu">menu</a></label>
+      </div>
+      <div id="rnav">
+          <li> <a href="/docs" title="docs">Docs</a></li>
+          <li> <a href="/blog" title="blog">Blog</a></li>
+          <li> <a href="/projects.html" title="projects">Projcsts</a></li>
+          <li> <a href="/community.html" title="community">Community</a></li>
+          <li> <a href="/more.html" title="more">More</a></li>
+      </div> 
+  </div>
+
+    </header>
+    <main>
+      <section class="blog">
+        <div class="inner">
+          <aside>
+            <details>
+              <summary>介绍</summary>
+                <ul>
+                  <li><a  href="/docs/intro/whatis.html">何为Actix</a></li>
+                  <li><a  href="/docs/intro/installation.html">安装</a></li>
+                </ul>
+            </details>
+            <details>
+              <summary>基本</summary>
+              <ul>
+                <li><a  href="/docs/basics/application.html">应用</a></li>
+                <li><a  href="/docs/basics/extractors.html">Extractors</a></li>
+                <li><a  href="/docs/basics/getting-started.html">开始</a></li>
+                <li><a  href="/docs/basics/handlers.html">Handlers</a></li>
+                <li><a  href="/docs/basics/server.html">服务器</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>高级</summary>
+              <ul>
+                <li><a  href="/docs/advance/errors.html">错愕处理</a></li>
+                <li><a  href="/docs/advance/middleware.html">中间件</a></li>
+                <li><a  href="/docs/advance/request.html">请求</a></li>
+                <li><a  href="/docs/advance/response、.html">响应</a></li>
+                <li><a  href="/docs/advance/static-files.html">静态文件</a></li>
+                <li><a  href="/docs/advance/testing.html">测试</a></li>
+                <li><a  href="/docs/advance/url-dispatch.html">路由分发</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>协议</summary>
+              <ul>
+                <li><a  href="/docs/protocols/http2.html">HTTP2</a></li>
+                <li><a  href="/docs/protocols/websocket.html">Websocket</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>主题</summary>
+              <ul>
+                <li><a  href="/docs/theme/autoreload.html">自动重加载</a></li>
+                <li><a  href="/docs/theme/databases.html">数据库</a></li>
+                <li><a  href="/docs/theme/sentry.html">Sentry</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>API文档</summary>
+              <ul>
+                <li><a  href="https://docs.rs/actix" target="view_window">Actix</a></li>
+                <li><a  href="https://docs.rs/actix-web" target="view_window">Actix-web</a></li>
+              </ul>
+            </details>
+          </aside>
+          <hr id="hr">
+          <main>
+          <h1>HTTP服务器</h1>
+<p>该<a href="../../actix-web/actix_web/server/struct.HttpServer.html"><strong>HttpServer</strong></a>类型负责服务的HTTP请求。</p>
+<p><code>HttpServer</code>接受应用程序工厂作为参数，并且应用程序工厂必须具有Send+ Sync边界。p
+要绑定到特定的套接字地址， <a href="../../actix-web/actix_web/server/struct.HttpServer.html#method.bind"><code>bind()</code></a> 必须使用，并且可能会多次调用它。绑定ssl套接字使用<a href="../../actix-web/actix_web/server/struct.HttpServer.html#method.bind_ssl"><code>bind_ssl()</code></a>或<a href="../../actix-web/actix_web/server/struct.HttpServer.html#method.bind_tls"><code>bind_tls()</code></a>。启动http服务器，启动方法之一是：</p>
+<ul>
+<li>use <a href="https://actix.rs/actix-web/actix_web/server/struct.HttpServer.html#method.start"><code>start()</code></a>
+for a server</li>
+</ul>
+<p><code>HttpServer</code>是一位actix actor。它必须在正确配置的actix系统中初始化：</p>
+<p>&lt; include-example example=&quot;server&quot; section=&quot;main&quot; &gt;</p>
+<blockquote>
+<p>可以使用该run()方法在单独的线程中启动服务器。在这种情况下，服务器会产生一个新线程并在其中创建一个新的actix系统。要停止此服务器，请发送<code>StopServer</code>消息。</p>
+</blockquote>
+<p><code>HttpServer</code>被实施为actix actor。可以通过消息传递系统与服务器进行通信。启动方法，例如<code>start()</code>，返回启动的http服务器的地址。它接受几种消息：</p>
+<ul>
+<li>PauseServer - 暂停接受传入连接</li>
+<li>ResumeServer - 继续接受传入连接</li>
+<li>StopServer - 停止传入连接处理，停止所有workers并退出</li>
+</ul>
+<p>&lt; include-example example=&quot;server&quot; file=&quot;signals.rs&quot; section=&quot;signals&quot; &gt;</p>
+<h2>多线程</h2>
+<p><code>HttpServer</code>自动启动一些http worker，默认情况下这个数量等于系统中逻辑CPU的数量。该数量可以用该<a href="../../actix-web/actix_web/server/struct.HttpServer.html#method.workers"><code>HttpServer::workers()</code></a>方法覆盖 。</p>
+<p>&lt; include-example example=&quot;server&quot; file=&quot;workers.rs&quot; section=&quot;workers&quot; &gt;</p>
+<p>服务器为每个创建的worker创建一个单独的应用实例。应用程序状态不在线程之间共享。分享状态，可以使用Arc。</p>
+<blockquote>
+<p>应用程序状态并不需要是Send和Sync，但是工厂必须是Send+ Sync。</p>
+</blockquote>
+<h2>SSL</h2>
+<p>有两种功能的ssl服务器：<code>tls</code>和<code>alpn</code>。该tls功能由native-tls集成，alpn由openssl。</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#c0c5ce;">[dependencies]
+</span><span style="background-color:#2b303b;color:#c0c5ce;">actix-web = { version = &quot;&lt; actix-version &quot;actix-web&quot; &gt;&quot;, features = [&quot;alpn&quot;] }
+</span></pre>
+<p>&lt; include-example example=&quot;server&quot; file=&quot;ssl.rs&quot; section=&quot;ssl&quot; &gt;</p>
+<p>》 <strong>注意</strong>：HTTP / 2.0协议需要<a href="https://tools.ietf.org/html/rfc7301">tls alpn</a>。目前，只有openssl有alpn支持。完整示例，请查看<a href="https://github.com/actix/examples/tree/master/tls">examples/tls</a>.</p>
+<p>要创建key.pem和cert.pem，请使用以下命令。<strong>Fill in your own subject</strong></p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#c0c5ce;">$ </span><span style="background-color:#2b303b;color:#b48ead;">openssl</span><span style="background-color:#2b303b;color:#c0c5ce;"> req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem \
+</span><span style="background-color:#2b303b;color:#c0c5ce;">  </span><span style="background-color:#2b303b;color:#c0c5ce;">-days 365 -sha256 -subj </span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">/C=CN/ST=Fujian/L=Xiamen/O=TVlinux/OU=Org/CN=muro.lxd</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span></pre>
+<p>要删除密码，请将nopass.pem复制到key.pem</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#c0c5ce;">$ </span><span style="background-color:#2b303b;color:#b48ead;">openssl</span><span style="background-color:#2b303b;color:#c0c5ce;"> rsa -</span><span style="background-color:#2b303b;color:#b48ead;">in</span><span style="background-color:#2b303b;color:#c0c5ce;"> key.pem -out nopass.pem
+</span></pre>
+<h2>Keep-Alive</h2>
+<p>Actix可以等待keep-alive的请求。</p>
+<p>》 <em>keep-alive</em>连接行为由服务器设置定义。</p>
+<ul>
+<li><code>75</code>, <code>Some(75)</code>, <code>KeepAlive::Timeout(75)</code> - 75秒keep alive定时器。</li>
+<li><code>None</code> or <code>KeepAlive::Disabled</code> - 禁用 <em>keep alive</em>.</li>
+<li><code>KeepAlive::Tcp(75)</code> -  使用 <code>SO_KEEPALIVE</code> socket 选项.</li>
+</ul>
+<p>&lt; include-example example=&quot;server&quot; file=&quot;ka.rs&quot; section=&quot;ka&quot; &gt;</p>
+<p>如果选择第一个选项，则<em>keep alive</em>状态根据响应的<em>connection-type</em>计算。默认情况下<code>HttpResponse::connection_type</code>未定义。在这种情况下， <em>keep alive</em> 状态由请求的http版本定义。</p>
+<blockquote>
+<p><em>keep alive</em> 是 <strong>关闭</strong> 对于 <em>HTTP/1.0</em> 然而是 <strong>打开</strong> 对于 <em>HTTP/1.1</em> 和 <em>HTTP/2.0</em>.</p>
+</blockquote>
+<p><em>Connection type</em>可以用<code>HttpResponseBuilder::connection_type()</code>方法改变。</p>
+<p>&lt; include-example example=&quot;server&quot; file=&quot;ka_tp.rs&quot; section=&quot;example&quot; &gt;</p>
+<h2>优雅的关机</h2>
+<p><code>HttpServer</code>支持优雅的关机。收到停止信号后，workers会有特定的时间完成服务请求。任何在超时后仍然活着的workers（工作线程）都会被迫停止。默认情况下，关机超时设置为30秒。您可以使用<a href="../../actix-web/actix_web/server/struct.HttpServer.html#method.shutdown_timeout"><code>HttpServer::shutdown_timeout()</code></a>方法更改此参数 。</p>
+<p>您可以使用服务器地址向服务器发送停止消息，并指定是否要进行正常关机。<a href="../../actix-web/actix_web/server/struct.HttpServer.html#method.start"><code>start()</code></a>方法返回服务器的地址。</p>
+<p><code>HttpServer</code>处理几个OS信号。所有操作系统都提供CTRL-C，其他信号在unix系统上可用。</p>
+<ul>
+<li><em>SIGINT</em> - 强制关闭工作线程</li>
+<li><em>SIGTERM</em> - 优雅的停止工作线程</li>
+<li><em>SIGQUIT</em> - 制关闭 workers工作线程</li>
+</ul>
+<blockquote>
+<p>可以用<a href="../../actix-web/actix_web/server/struct.HttpServer.html#method.disable_signals"><code>HttpServer::disable_signals()</code></a>
+方法禁用信号处理 。</p>
+</blockquote>
+
+          </main>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div >
+  <p>Made ❤️  by the <a href="https://cobalt-org.github.io/">Cobalt</a></p>
+</div>
+
+    </footer>
+  </body>
+</html>

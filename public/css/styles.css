@@ -76,6 +76,7 @@
     text-decoration: none;
     transition: all 0.15s ease-in-out;
     color: rgb(70, 1, 70);
+    margin-left: 1rem;
   }
 
   section.docs aside ul li a.active,
@@ -87,8 +88,8 @@
   section.blog aside ul li a:active,
   section.blog aside ul li a:focus {
     color: var(--purple);
-    border-left: 3px solid var(--purple);
-    padding: 0.25rem 0.5rem;
+    /* border-left: 3px solid var(--purple);
+    padding: 0.25rem 0.5rem; */
   }
   section.docs aside p, section.blog aside p {
     font-size: 1.2rem;

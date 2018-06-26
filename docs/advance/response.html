@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1", maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>文档:高级:响应</title>
+<link rel="shortcut icon" href="/public/imgs/favicon.ico">
+<link rel="stylesheet" href="/public/css/styles.css">
+<script src="/public/js/actix.js" async="async"></script>
+
+  </head>
+  <body>
+    <header>
+        <div id="mnav">
+      <div id="lnav">
+        <h1><a href="/"><img src="/public/imgs/actix.png"/></a><a id="name" href="/">Actix</a></h1>
+        <label ><a href="#" id="menu">menu</a></label>
+      </div>
+      <div id="rnav">
+          <li> <a href="/docs" title="docs">Docs</a></li>
+          <li> <a href="/blog" title="blog">Blog</a></li>
+          <li> <a href="/projects.html" title="projects">Projcsts</a></li>
+          <li> <a href="/community.html" title="community">Community</a></li>
+          <li> <a href="/more.html" title="more">More</a></li>
+      </div> 
+  </div>
+
+    </header>
+    <main>
+      <section class="blog">
+        <div class="inner">
+          <aside>
+            <details>
+              <summary>介绍</summary>
+                <ul>
+                  <li><a  href="/docs/intro/whatis.html">何为Actix</a></li>
+                  <li><a  href="/docs/intro/installation.html">安装</a></li>
+                </ul>
+            </details>
+            <details>
+              <summary>基本</summary>
+              <ul>
+                <li><a  href="/docs/basics/application.html">应用</a></li>
+                <li><a  href="/docs/basics/extractors.html">Extractors</a></li>
+                <li><a  href="/docs/basics/getting-started.html">开始</a></li>
+                <li><a  href="/docs/basics/handlers.html">Handlers</a></li>
+                <li><a  href="/docs/basics/server.html">服务器</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>高级</summary>
+              <ul>
+                <li><a  href="/docs/advance/errors.html">错愕处理</a></li>
+                <li><a  href="/docs/advance/middleware.html">中间件</a></li>
+                <li><a  href="/docs/advance/request.html">请求</a></li>
+                <li><a  href="/docs/advance/response、.html">响应</a></li>
+                <li><a  href="/docs/advance/static-files.html">静态文件</a></li>
+                <li><a  href="/docs/advance/testing.html">测试</a></li>
+                <li><a  href="/docs/advance/url-dispatch.html">路由分发</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>协议</summary>
+              <ul>
+                <li><a  href="/docs/protocols/http2.html">HTTP2</a></li>
+                <li><a  href="/docs/protocols/websocket.html">Websocket</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>主题</summary>
+              <ul>
+                <li><a  href="/docs/theme/autoreload.html">自动重加载</a></li>
+                <li><a  href="/docs/theme/databases.html">数据库</a></li>
+                <li><a  href="/docs/theme/sentry.html">Sentry</a></li>
+              </ul>
+            </details>
+            <details>
+              <summary>API文档</summary>
+              <ul>
+                <li><a  href="https://docs.rs/actix" target="view_window">Actix</a></li>
+                <li><a  href="https://docs.rs/actix-web" target="view_window">Actix-web</a></li>
+              </ul>
+            </details>
+          </aside>
+          <hr id="hr">
+          <main>
+          <h1>Response</h1>
+<p>A builder-like pattern is used to construct an instance of <code>HttpResponse</code>.
+<code>HttpResponse</code> provides several methods that return a <code>HttpResponseBuilder</code> instance,
+which implements various convenience methods for building responses.</p>
+<blockquote>
+<p>Check the <a href="../../actix-web/actix_web/dev/struct.HttpResponseBuilder.html">documentation</a>
+for type descriptions.</p>
+</blockquote>
+<p>The methods <code>.body</code>, <code>.finish</code>, and <code>.json</code> finalize response creation and
+return a constructed <em>HttpResponse</em> instance. If this methods is called on the same
+builder instance multiple times, the builder will panic.</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">actix_web</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">http</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">ContentEncoding</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">index</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#bf616a;">req</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">-&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Ok</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">content_encoding</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">ContentEncoding</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Br</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">content_type</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">plain/text</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">header</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">X-Hdr</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">sample</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">body</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">data</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span></pre>
+<h1>Content encoding</h1>
+<p>Actix automatically <em>compresses</em> payloads. The following codecs are supported:</p>
+<ul>
+<li>Brotli</li>
+<li>Gzip</li>
+<li>Deflate</li>
+<li>Identity</li>
+</ul>
+<p>Response payload is compressed based on the <em>content_encoding</em> parameter.
+By default, <code>ContentEncoding::Auto</code> is used. If <code>ContentEncoding::Auto</code> is selected,
+then the compression depends on the request's <code>Accept-Encoding</code> header.</p>
+<blockquote>
+<p><code>ContentEncoding::Identity</code> can be used to disable compression.
+If another content encoding is selected, the compression is enforced for that codec.</p>
+</blockquote>
+<p>For example, to enable <code>brotli</code> use <code>ContentEncoding::Br</code>:</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">actix_web</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">http</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">ContentEncoding</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">index</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#bf616a;">req</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">-&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Ok</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">content_encoding</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">ContentEncoding</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Br</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">body</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">data</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span></pre>
+<p>In this case we explicitly disable content compression
+by setting content encoding to a <code>Identity</code> value:</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">actix_web</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">http</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">ContentEncoding</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">index</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#bf616a;">req</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">-&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Ok</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#65737e;">//</span><span style="background-color:#2b303b;color:#65737e;"> v- disable compression
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">content_encoding</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">ContentEncoding</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Identity</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">body</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">data</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span></pre>
+<p>Also it is possible to set default content encoding on application level, by
+default <code>ContentEncoding::Auto</code> is used, which implies automatic content compression
+negotiation.</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">actix_web</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">App</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">http</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">ContentEncoding</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">index</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#bf616a;">req</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">-&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Ok</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">body</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">data</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">main</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#b48ead;">let</span><span style="background-color:#2b303b;color:#c0c5ce;"> app </span><span style="background-color:#2b303b;color:#c0c5ce;">=</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">App</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">new</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#65737e;">//</span><span style="background-color:#2b303b;color:#65737e;"> v- disable compression for all routes
+</span><span style="background-color:#2b303b;color:#c0c5ce;">       </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">default_encoding</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">ContentEncoding</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Identity</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">       </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">resource</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">/index.html</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">|</span><span style="background-color:#2b303b;color:#bf616a;">r</span><span style="background-color:#2b303b;color:#c0c5ce;">|</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">r.</span><span style="background-color:#2b303b;color:#96b5b4;">with</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">index</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span></pre>
+<h1>JSON Response</h1>
+<p>The <code>Json</code> type allows to respond with well-formed JSON data: simply return a value of
+type Json<T> where <code>T</code> is the type of a structure to serialize into <em>JSON</em>.
+The type <code>T</code> must implement the <code>Serialize</code> trait from <em>serde</em>.</p>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#c0c5ce;">#</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#b48ead;">extern</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#b48ead;">crate</span><span style="background-color:#2b303b;color:#c0c5ce;"> actix_web</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">#</span><span style="background-color:#2b303b;color:#c0c5ce;">[</span><span style="background-color:#2b303b;color:#bf616a;">macro_use</span><span style="background-color:#2b303b;color:#c0c5ce;">]</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#b48ead;">extern</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#b48ead;">crate</span><span style="background-color:#2b303b;color:#c0c5ce;"> serde_derive</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">actix_web</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">App</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> Json</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">Result</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">http</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Method</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">#</span><span style="background-color:#2b303b;color:#c0c5ce;">[</span><span style="background-color:#2b303b;color:#bf616a;">derive</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">Serialize</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">]</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">struct</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">MyObj</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#bf616a;">name</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> String,
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">index</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#bf616a;">req</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">-&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">Result</span><span style="background-color:#2b303b;color:#c0c5ce;">&lt;</span><span style="background-color:#2b303b;color:#c0c5ce;">Json</span><span style="background-color:#2b303b;color:#c0c5ce;">&lt;</span><span style="background-color:#2b303b;color:#c0c5ce;">MyObj</span><span style="background-color:#2b303b;color:#c0c5ce;">&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;">&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">Ok</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">Json</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">MyObj</span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">name</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> req.</span><span style="background-color:#2b303b;color:#96b5b4;">match_info</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">query</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">name</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">?</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">main</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">App</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">new</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">resource</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#b48ead;">r</span><span style="background-color:#2b303b;color:#a3be8c;">&quot;/a/{name}</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">,</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">|</span><span style="background-color:#2b303b;color:#bf616a;">r</span><span style="background-color:#2b303b;color:#c0c5ce;">|</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">r.</span><span style="background-color:#2b303b;color:#96b5b4;">method</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">Method</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#d08770;">GET</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">f</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">index</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">finish</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span></pre>
+<h1>Chunked transfer encoding</h1>
+<p>Chunked encoding on a response can be enabled with <code>HttpResponseBuilder::chunked()</code>.
+This takes effect only for <code>Body::Streaming(BodyStream)</code> or <code>Body::StreamingContext</code> bodies.
+If the response payload compression is enabled and a streaming body is used, chunked encoding
+is enabled automatically.</p>
+<blockquote>
+<p>Enabling chunked encoding for <em>HTTP/2.0</em> responses is forbidden.</p>
+</blockquote>
+<pre style="background-color:#2b303b">
+<span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">actix_web</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">*</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">bytes</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Bytes</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">use</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">futures</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">stream</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">once</span><span style="background-color:#2b303b;color:#c0c5ce;">;</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#b48ead;">fn</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#8fa1b3;">index</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#bf616a;">req</span><span style="background-color:#2b303b;color:#c0c5ce;">:</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpRequest</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">-&gt;</span><span style="background-color:#2b303b;color:#c0c5ce;"> HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;"> </span><span style="background-color:#2b303b;color:#c0c5ce;">{</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">    </span><span style="background-color:#2b303b;color:#c0c5ce;">HttpResponse</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Ok</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">chunked</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">        </span><span style="background-color:#2b303b;color:#c0c5ce;">.</span><span style="background-color:#2b303b;color:#96b5b4;">body</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">Body</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">Streaming</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">Box</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">new</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#96b5b4;">once</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">Ok</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#c0c5ce;">Bytes</span><span style="background-color:#2b303b;color:#c0c5ce;">::</span><span style="background-color:#2b303b;color:#c0c5ce;">from_static</span><span style="background-color:#2b303b;color:#c0c5ce;">(</span><span style="background-color:#2b303b;color:#b48ead;">b</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#a3be8c;">data</span><span style="background-color:#2b303b;color:#c0c5ce;">&quot;</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">)</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span><span style="background-color:#2b303b;color:#c0c5ce;">}</span><span style="background-color:#2b303b;color:#c0c5ce;">
+</span></pre>
+          </main>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div >
+  <p>Made ❤️  by the <a href="https://cobalt-org.github.io/">Cobalt</a></p>
+</div>
+
+    </footer>
+  </body>
+</html>
